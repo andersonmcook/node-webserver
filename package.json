@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/andersonmcook/node-webserver#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "node-cal": "github:andersonmcook/node-cal"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"
