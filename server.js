@@ -24,6 +24,7 @@ app.get('/hello', (req, res) => {
   }, 20000);
 });
 
+// random num gen between min and max
 router.get('/random/:min/:max', (req, res) => {
   const min = req.params.min;
   const max = req.params.max;
@@ -48,8 +49,10 @@ router.get('/cal/:year', (req, res) => {
   res.status(200).send(`<code>${calendarResult}</code>`)
 });
 
+// able to use router with this function
 app.use(router);
 
+// calendar result for today
 app.get('/cal', (req, res) => {
   const date = new Date;
   const year = date.getFullYear();
@@ -72,6 +75,7 @@ app.get('/secret', (req, res) => {
     .send(403, `<h1>Access Denied</h1>`);
 });
 
+// main page with links to other pages
 app.get('/', (req, res) => {
   res.status(200).send(`<ul>
     <li><a href="/hello">Hello</a></li>
