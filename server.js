@@ -36,14 +36,8 @@ router.get('/random/:min/:max', (req, res) => {
 router.get('/cal/:month/:year', (req, res) => {
   const month = req.params.month;
   const year = req.params.year;
-  console.log("year", year, "month", month);
-  // const result = execSync(wholeMonth(year, month));
-  // res.send(`${wholeMonth(year, month)}`);
-  // res.send(result);
-  const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n");
-  console.log("days", days);
-  const p = "<p style='font-family: monospace;'>"
-  res.status(200).send(`${p}${days[0]}</p>${p}${days[1]}</p>${p}${days[2]}</p>${p}${days[3]}</p>${p}${days[4]}</p>`);
+  const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
+  res.status(200).send(`<code>${days}</code>`);
 });
 
 app.use(router);
