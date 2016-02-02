@@ -4,15 +4,14 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 const PORT = process.env.PORT || 3000;
-const execSync = require('child_process').execSync;
+// const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
 
 // hello world page
 app.get('/hello', (req, res) => {
   const name = req.query.name;
-  const msg = `<h1>Hello ${name}!</h1>
-<h1>Goodbye ${name}!</h1>`;
+  const msg = `<h1>Hello ${name}!</h1><h1>Goodbye ${name}!</h1>`;
   res.writeHead(200, {"Content-Type": "text/html"});
 // split msg so that it prints out slowly
   msg.split("").forEach((char, i) => {
@@ -24,7 +23,6 @@ app.get('/hello', (req, res) => {
     res.end();
   }, 20000);
 });
-
 
 router.get('/random/:min/:max', (req, res) => {
   const min = req.params.min;
