@@ -77,10 +77,16 @@ app.get('/secret', (req, res) => {
 
 // main page with links to other pages
 app.get('/', (req, res) => {
-  res.status(200).send(`<ul>
-    <li><a href="/hello">Hello</a></li>
-    <li><a href="/random">Random Number Generator</a></li>
-    <li><a href="/cal">Calendar</a></li>
+  res.status(200).send(`
+    <h1>Links</h1>
+    <ul>
+      <li><a href="/hello">Hello</a></li>
+      <li><a href="/hello?name=Anderson">Hello Anderson</a></li>
+      <li><a href="/random">Random Number Generator</a></li>
+      <li><a href="/random/6/90">Random Number Generator between 6 and 90</a></li>
+      <li><a href="/cal">Calendar for this month</a></li>
+      <li><a href="/cal/2017">Calendar for 2017</a></li>
+      <li><a href="/cal/12/1999">Calendar for December 1999</a></li>
     </ul>`);
 });
 
