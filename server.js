@@ -10,7 +10,7 @@ const calendar = require('node-cal/lib/year').calendar;
 
 // hello world page
 app.get('/hello', (req, res) => {
-  const name = req.query.name;
+  const name = req.query.name || "user";
   const msg = `<h1>Hello ${name}!</h1><h1>Goodbye ${name}!</h1>`;
   res.writeHead(200, {"Content-Type": "text/html"});
 // split msg so that it prints out slowly
@@ -51,12 +51,11 @@ router.get('/cal/:year', (req, res) => {
 app.use(router);
 
 app.get('/cal', (req, res) => {
-  // // console.log(month);
-  // // res.send(`${month}`);
-  // const test = execSync(wholeMonth(2016, 1)).toString();
-  // // console.log(test);
-  // res.send(`${wholeMonth(2016, 1)}`);
-  // // res.send(`${test}`);
+  const date = new Date;
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
+  res.status(200).send(`<code>${days}`);
 });
 
 // random num gen page
@@ -71,6 +70,14 @@ app.get('/secret', (req, res) => {
   res
     .status(403)
     .send(403, `<h1>Access Denied</h1>`);
+});
+
+app.get('/', (req, res) => {
+  res.status(200).send(`<ul>
+    <li><a href="/hello">Hello</a></li>
+    <li><a href="/random">Random Number Generator</a></li>
+    <li><a href="/cal">Calendar</a></li>
+    </ul>`);
 });
 
 // listen for requests
