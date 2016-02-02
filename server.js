@@ -5,7 +5,7 @@ const app = express();
 const router = express.Router();
 const PORT = process.env.PORT || 3000;
 const execSync = require('child_process').execSync;
-const wholeMonth = require('node-cal/lib/month').wholeMonth;
+const calMonth = require('node-cal/lib/month');
 const _ = require('lodash');
 
 // hello world page
@@ -34,9 +34,9 @@ router.get('/random/:min/:max', (req, res) => {
 
 // calendar
 router.get('/cal/:month/:year', (req, res) => {
-  const month = req.params.month;
-  const year = req.params.year;
-  const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
+  const month = parseInt(req.params.month);
+  const year = parseInt(req.params.year);
+  const days = calMonth.wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
   res.status(200).send(`<code>${days}</code>`);
 });
 
