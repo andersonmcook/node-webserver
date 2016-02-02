@@ -13,6 +13,7 @@ app.get('/hello', (req, res) => {
   const name = req.query.name || "user";
   const msg = `<h1>Hello ${name}!</h1><h1>Goodbye ${name}!</h1>`;
   res.writeHead(200, {"Content-Type": "text/html"});
+  res.write(`<header><title>Hello ${name}</title></header>`);
 // split msg so that it prints out slowly
   msg.split("").forEach((char, i) => {
     setTimeout(() => {
@@ -28,7 +29,9 @@ app.get('/hello', (req, res) => {
 router.get('/random/:min/:max', (req, res) => {
   const min = req.params.min;
   const max = req.params.max;
-  res.send(`<h1>${parseInt(Math.random() * (max - min) + min)}</h1>`);
+  res.send(`
+    <header><title>RNG between ${min} and ${max}</title></header>
+    <h1>${parseInt(Math.random() * (max - min) + min)}</h1>`);
 });
 
 // month calendar
@@ -38,7 +41,9 @@ router.get('/cal/:month/:year', (req, res) => {
   month < 1 || month > 12 ? res.status(200).send(`<code>Pick a month between 1 and 12</code`) : month;
   year > 9999 || year < 1783 ? res.status(200).send(`<code>Pick a year between 1783 and 9999</code>`) : year;
   const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
-  res.status(200).send(`<code>${days}</code>`);
+  res.status(200).send(`
+    <header><title>Calendar for ${month} ${year}</title></header>
+    <code>${days}</code>`);
 });
 
 //year calendar
@@ -46,7 +51,9 @@ router.get('/cal/:year', (req, res) => {
   const year = parseInt(req.params.year);
   year > 9999 || year < 1783 ? res.status(200).send(`<code>Pick a year between 1783 and 9999</code>`) : year;
   const calendarResult = calendar(year).replace(/ /g, "&nbsp;").split("\n").join("<br>");
-  res.status(200).send(`<code>${calendarResult}</code>`)
+  res.status(200).send(`
+    <header><title>Calendar for ${year}</title></header>
+    <code>${calendarResult}</code>`)
 });
 
 // able to use router with this function
@@ -58,14 +65,18 @@ app.get('/cal', (req, res) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
-  res.status(200).send(`<code>${days}`);
+  res.status(200).send(`
+    <header><title>Calendar for ${month} ${year}</title></header>
+    <code>${days}`);
 });
 
 // random num gen page
 app.get('/random', (req, res) => {
   res
     .status(200)
-    .send(`<h1>${Math.random()}</h1>`);
+    .send(`
+      <header><title>RNG</title></header>
+      <h1>${Math.random()}</h1>`);
 });
 
 // 403 page
@@ -78,6 +89,7 @@ app.get('/secret', (req, res) => {
 // main page with links to other pages
 app.get('/', (req, res) => {
   res.status(200).send(`
+    <header><title>Main</title></header>
     <h1>Links</h1>
     <ul>
       <li><a href="/hello">Hello</a></li>
