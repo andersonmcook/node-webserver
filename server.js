@@ -5,8 +5,8 @@ const app = express();
 const router = express.Router();
 const PORT = process.env.PORT || 3000;
 const execSync = require('child_process').execSync;
-const calMonth = require('node-cal/lib/month');
-const _ = require('lodash');
+const wholeMonth = require('node-cal/lib/month').wholeMonth;
+const calendar = require('node-cal/lib/year').calendar;
 
 // hello world page
 app.get('/hello', (req, res) => {
@@ -32,12 +32,22 @@ router.get('/random/:min/:max', (req, res) => {
   res.send(`<h1>${parseInt(Math.random() * (max - min) + min)}</h1>`);
 });
 
-// calendar
+// month calendar
 router.get('/cal/:month/:year', (req, res) => {
   const month = parseInt(req.params.month);
   const year = parseInt(req.params.year);
-  const days = calMonth.wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
+  month < 1 || month > 12 ? res.status(200).send(`<code>Pick a month between 1 and 12</code`) : month;
+  year > 9999 || year < 1783 ? res.status(200).send(`<code>Pick a year between 1783 and 9999</code>`) : year;
+  const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
   res.status(200).send(`<code>${days}</code>`);
+});
+
+//year calendar
+router.get('/cal/:year', (req, res) => {
+  const year = parseInt(req.params.year);
+  year > 9999 || year < 1783 ? res.status(200).send(`<code>Pick a year between 1783 and 9999</code>`) : year;
+  const calendarResult = calendar(year).replace(/ /g, "&nbsp;").split("\n").join("<br>");
+  res.status(200).send(`<code>${calendarResult}</code>`)
 });
 
 app.use(router);
