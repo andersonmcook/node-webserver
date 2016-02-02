@@ -1,29 +1,35 @@
 'use strict';
 
-const http = require('http');
+const app = require('express')();
 const PORT = process.env.PORT || 3000;
 
-http.createServer((req, res) => {
-  console.log(req.method, req.url);
-
-  if(req.url === "/hello") {
-    const msg = "<h1>Hello World!</h1>";
-    msg.split("").forEach((char, i) => {
-      setTimeout(() => {
-        res.write(char);
-      }, 1000 * i);
-    });
-    setTimeout(() => {
-      res.end();
-    }, 20000);
-
-  } else if (req.url === "/random") {
-    res.end(`<h1>${Math.random()}</h1>`)
-  } else {
-    res.writeHead(403);
-    res.end(`<h1>Access Denied</h1>`)
-  }
+// hello world page
+app.get('/hello', (req, res) => {
+  const msg = "<h1>Hello Smithers, you're quite good at turning me on.</h1>";
   res.writeHead(200, {"Content-Type": "text/html"});
-}).listen(PORT, () => {
+// split msg so that it prints out slowly
+  msg.split("").forEach((char, i) => {
+    setTimeout(() => {
+      res.write(char);
+    }, 100 * i);
+  });
+  setTimeout(() => {
+    res.end();
+  }, 20000);
+});
+
+// random num gen page
+app.get('/random', (req, res) => {
+  res.end(`<h1>${Math.random()}</h1>`);
+});
+
+// 404 page
+app.all('*', (req, res) => {
+  res.writeHead(403);
+  res.end(`<h1>Access Denied</h1>`)
+});
+
+// listen for requests
+app.listen(PORT, () => {
   console.log(`Node.js server started. Listening on port ${PORT}`);
 });
