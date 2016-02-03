@@ -1,0 +1,21 @@
+{
+  "name": "node-webserver",
+  "description": "",
+  "main": "",
+  "authors": [
+    "andersonmcook <andersonmcook@gmail.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.0"
+  }
+}

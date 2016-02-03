@@ -2,6 +2,7 @@ doctype html
 html
   head
     title= title
+    link(rel="stylesheet" type="text/css" href="http://localhost:3000/sass/css/sass-style.scss")
   body
     h1 Welcome to my #{title}
-    p The date is now #{date}
+    p The date is now #{date.toLocaleDateString()}

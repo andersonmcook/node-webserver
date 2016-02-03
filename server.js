@@ -4,12 +4,23 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 const PORT = process.env.PORT || 3000;
+const path = require('path');
+const nodeSassMiddleware = require('node-sass-middleware');
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
 
 // set view engine to a file ending with .jade in the views folder by default
 app.set('view engine', 'jade');
+
+app.use(nodeSassMiddleware({
+  src: path.join(__dirname, 'public'),
+  dest: path.join(__dirname, 'public'),
+  indentedSyntax: true,
+  sourceMap: true,
+  outputStyle: 'compressed',
+  debug: true
+}));
 
 // able to use static files
 app.use(express.static('public'));
