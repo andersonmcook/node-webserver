@@ -10,10 +10,21 @@ li {
   margin-bottom: .5em;
 }
 
+li:hover {
+  background: black;
+}
+
 a:hover {
   text-decoration: none;
+  color: white;
+  background: black;
 }
 
 a {
   color: black;
+  text-decoration: none;
+}
+
+a::before {
+  content: "> ";
 }
