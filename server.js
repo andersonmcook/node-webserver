@@ -8,10 +8,21 @@ const PORT = process.env.PORT || 3000;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
 
+// set view engine to a file ending with .jade in the views folder by default
+app.set('view engine', 'jade');
+
 // able to use static files
 app.use(express.static('public'));
 
 const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
+
+// using jade to render
+app.get('/jade', (req, res) => {
+  res.render('index', {
+    title: 'Super Cool App',
+    date: new Date()
+  });
+});
 
 // hello world page
 app.get('/hello', (req, res) => {
@@ -128,6 +139,7 @@ app.get('/', (req, res) => {
       <li><a href="/cal">Calendar for this month</a></li>
       <li><a href="/cal/2017">Calendar for 2017</a></li>
       <li><a href="/cal/12/1999">Calendar for December 1999</a></li>
+      <li><a href="/jade">Rendered with Jade</a></li>
     </ul>`);
 });
 
