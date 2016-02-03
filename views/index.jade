@@ -2,7 +2,21 @@ doctype html
 html
   head
     title= title
-    link(rel="stylesheet" type="text/css" href="http://localhost:3000/sass/css/sass-style.scss")
+    link(rel="stylesheet" type="text/css" href="/stylesheets/sass-style.css")
   body
-    h1 Welcome to my #{title}
-    p The date is now #{date.toLocaleDateString()}
+    h1 ./cal.js
+    h3 Alternative to #[span.bad cal]
+    h2#tag(style="display: none") It's the goddamned best.
+    h4 Features
+    ul
+      li Replicates functionality of #[strong cal] from OSX
+      li That's basically it
+    ul
+      li
+        a(href="/cal") This Month
+      li
+        a(href="/cal/2016") Full Year 2016
+      li
+        a(href="/cal/8/1982") Whatever month you want from many years
+    script(src="/lib/jquery/dist/jquery.min.js")
+    script(src="/javascripts/use-jquery.js")
