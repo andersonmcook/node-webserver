@@ -11,12 +11,17 @@ const calendar = require('node-cal/lib/year').calendar;
 // able to use static files
 app.use(express.static('public'));
 
+const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
+
 // hello world page
 app.get('/hello', (req, res) => {
   const name = req.query.name || "user";
   const msg = `<h1>Hello ${name}!</h1><h1>Goodbye ${name}!</h1>`;
   res.writeHead(200, {"Content-Type": "text/html"});
-  res.write(`<head><title>Hello ${name}</title></head>`);
+  res.write(`<head><title>Hello ${name}</title>
+      <link rel="stylesheet" type="text/css" href="http://localhost:3000/white.css">
+    </head>
+    ${backButton}`);
 // split msg so that it prints out slowly
   msg.split("").forEach((char, i) => {
     setTimeout(() => {
@@ -33,7 +38,10 @@ router.get('/random/:min/:max', (req, res) => {
   const min = req.params.min;
   const max = req.params.max;
   res.send(`
-    <head><title>RNG between ${min} and ${max}</title></head>
+    <head><title>RNG between ${min} and ${max}</title>
+      <link rel="stylesheet" type="text/css" href="http://localhost:3000/white.css">
+    </head>
+    ${backButton}
     <h1>${parseInt(Math.random() * (max - min) + min)}</h1>`);
 });
 
@@ -49,6 +57,7 @@ router.get('/cal/:month/:year', (req, res) => {
       <title>Calendar for ${month} ${year}</title>
       <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
     </head>
+    ${backButton}
     <code>${days}</code>`);
 });
 
@@ -62,6 +71,7 @@ router.get('/cal/:year', (req, res) => {
       <title>Calendar for ${year}</title>
       <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
     </head>
+    ${backButton}
     <code>${calendarResult}</code>`)
 });
 
@@ -79,6 +89,7 @@ app.get('/cal', (req, res) => {
       <title>Calendar for ${month} ${year}</title>
       <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
     </head>
+    ${backButton}
     <code>${days}`);
 });
 
@@ -87,7 +98,10 @@ app.get('/random', (req, res) => {
   res
     .status(200)
     .send(`
-      <head><title>RNG</title></head>
+      <head><title>RNG</title>
+        <link rel="stylesheet" type="text/css" href="http://localhost:3000/white.css">
+      </head>
+      ${backButton}
       <h1>${Math.random()}</h1>`);
 });
 
@@ -95,13 +109,16 @@ app.get('/random', (req, res) => {
 app.get('/secret', (req, res) => {
   res
     .status(403)
-    .send(403, `<h1>Access Denied</h1>`);
+    .send(403, `${backButton}
+      <h1>Access Denied</h1>`);
 });
 
 // main page with links to other pages
 app.get('/', (req, res) => {
   res.status(200).send(`
-    <head><title>Main</title></head>
+    <head><title>Main</title>
+      <link rel="stylesheet" type="text/css" href="http://localhost:3000/white.css">
+    </head>
     <h1>Links</h1>
     <ul>
       <li><a href="/hello">Hello</a></li>

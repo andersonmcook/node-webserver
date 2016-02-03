@@ -1,0 +1,19 @@
+body {
+  font-family: sans-serif;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: .5em;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a {
+  color: black;
+}
