@@ -8,12 +8,15 @@ const PORT = process.env.PORT || 3000;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
 
+// able to use static files
+app.use(express.static('public'));
+
 // hello world page
 app.get('/hello', (req, res) => {
   const name = req.query.name || "user";
   const msg = `<h1>Hello ${name}!</h1><h1>Goodbye ${name}!</h1>`;
   res.writeHead(200, {"Content-Type": "text/html"});
-  res.write(`<header><title>Hello ${name}</title></header>`);
+  res.write(`<head><title>Hello ${name}</title></head>`);
 // split msg so that it prints out slowly
   msg.split("").forEach((char, i) => {
     setTimeout(() => {
@@ -30,7 +33,7 @@ router.get('/random/:min/:max', (req, res) => {
   const min = req.params.min;
   const max = req.params.max;
   res.send(`
-    <header><title>RNG between ${min} and ${max}</title></header>
+    <head><title>RNG between ${min} and ${max}</title></head>
     <h1>${parseInt(Math.random() * (max - min) + min)}</h1>`);
 });
 
@@ -42,7 +45,10 @@ router.get('/cal/:month/:year', (req, res) => {
   year > 9999 || year < 1783 ? res.status(200).send(`<code>Pick a year between 1783 and 9999</code>`) : year;
   const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
   res.status(200).send(`
-    <header><title>Calendar for ${month} ${year}</title></header>
+    <head>
+      <title>Calendar for ${month} ${year}</title>
+      <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
+    </head>
     <code>${days}</code>`);
 });
 
@@ -52,7 +58,10 @@ router.get('/cal/:year', (req, res) => {
   year > 9999 || year < 1783 ? res.status(200).send(`<code>Pick a year between 1783 and 9999</code>`) : year;
   const calendarResult = calendar(year).replace(/ /g, "&nbsp;").split("\n").join("<br>");
   res.status(200).send(`
-    <header><title>Calendar for ${year}</title></header>
+    <head>
+      <title>Calendar for ${year}</title>
+      <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
+    </head>
     <code>${calendarResult}</code>`)
 });
 
@@ -66,7 +75,10 @@ app.get('/cal', (req, res) => {
   const month = date.getMonth() + 1;
   const days = wholeMonth(year, month).replace(/ /g, "&nbsp;").split("\n").join("<br>");
   res.status(200).send(`
-    <header><title>Calendar for ${month} ${year}</title></header>
+    <head>
+      <title>Calendar for ${month} ${year}</title>
+      <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
+    </head>
     <code>${days}`);
 });
 
@@ -75,7 +87,7 @@ app.get('/random', (req, res) => {
   res
     .status(200)
     .send(`
-      <header><title>RNG</title></header>
+      <head><title>RNG</title></head>
       <h1>${Math.random()}</h1>`);
 });
 
@@ -89,7 +101,7 @@ app.get('/secret', (req, res) => {
 // main page with links to other pages
 app.get('/', (req, res) => {
   res.status(200).send(`
-    <header><title>Main</title></header>
+    <head><title>Main</title></head>
     <h1>Links</h1>
     <ul>
       <li><a href="/hello">Hello</a></li>
