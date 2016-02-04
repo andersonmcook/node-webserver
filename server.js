@@ -14,13 +14,13 @@ const imgur = require('imgur');
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
 
+// rename files that have been uploaded
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'tmp/uploads');
     },
     filename: function (req, file, cb) {
-       /* cb(null, file.fieldname + '-' + Date.now());*/
-       cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+       cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
   }
 })
 const upload = multer({ storage: storage });
