@@ -72,8 +72,16 @@ app.get('/send-photo', (req, res) => {
 // return the file
 app.post('/send-photo', upload.single('image'), (req, res) => {
   console.log(req.body, req.file);
-  req.file.filename = req.file.filename + ".jpeg";
-  res.send(`<h1>Thanks for sending us your photo</h1>`);
+  imgur.uploadFile(req.file.path)
+    .then(function (json) {
+        console.log(json.data.link);
+        let pic = json.data.link;
+        res.send(`<img src="${pic}">`);
+    })
+    .catch(function (err) {
+        console.error(err.message);
+    });
+  /*res.send(`<h1>Thanks for sending us your photo</h1>`);*/
 });
 
 // using jade to render index.jade
