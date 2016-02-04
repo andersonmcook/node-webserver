@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 //const upload = require('multer')({dest: 'tmp/uploads'});
 const multer = require('multer');
 const imgur = require('imgur');
+const fs = require('fs');
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
@@ -75,11 +76,14 @@ app.post('/send-photo', upload.single('image'), (req, res) => {
   imgur.uploadFile(req.file.path)
     .then(function (json) {
         console.log(json.data.link);
-        let pic = json.data.link;
-        res.send(`<img src="${pic}">`);
+        res.send(`<img src="${json.data.link}">`);
+        fs.unlink(req.file.path, () => {
+          console.log("file deleted");
+        });
     })
     .catch(function (err) {
         console.error(err.message);
+        res.write(err.message);
     });
   /*res.send(`<h1>Thanks for sending us your photo</h1>`);*/
 });
