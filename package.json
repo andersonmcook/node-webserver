@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/andersonmcook/node-webserver#readme",
   "dependencies": {
+    "body-parser": "^1.14.2",
     "express": "^4.13.4",
     "font-awesome": "^4.5.0",
     "jade": "^1.11.0",

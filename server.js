@@ -6,12 +6,18 @@ const router = express.Router();
 const PORT = process.env.PORT || 3000;
 const path = require('path');
 const nodeSassMiddleware = require('node-sass-middleware');
+const bodyParser = require('body-parser');
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
 
 // set view engine to a file ending with .jade in the views folder by default
 app.set('view engine', 'jade');
+
+/* body-parser middleware */
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 //node sass middleware
 app.use(nodeSassMiddleware({
@@ -32,12 +38,18 @@ const title = `.cal.js`;
 // set global title
 app.locals.title = 'THE Super Cool App';
 
-//contact.jade
+// contact.jade
 app.get('/contact', (req, res) => {
   res.render('contact');
 });
 
-// using jade to render
+// post
+app.post('/contact', (req, res) => {
+  const name = req.body.name
+  res.send(`<h1>Thanks for contacting us, ${name}</h1`);
+});
+
+// using jade to render index.jade
 app.get('/jade', (req, res) => {
   res.render('index');
 });

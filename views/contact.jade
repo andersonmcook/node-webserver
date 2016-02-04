@@ -5,15 +5,15 @@ html
   body
     .container
       h1 Contact
-      form
+      form(method='POST')
         div
           label Name
-            input(type='text', placeholder='Name')
+            input(type='text' name='name' placeholder='Name')
         div
           label Email
-            input(type='email', placeholder='Email')
+            input(type='email' name='email' placeholder='Email')
         div
           label Message
-            textarea(placeholder='Message')
+            textarea(name='message' placeholder='Message')
         div
           input(type='submit', value='Contact Us!')
