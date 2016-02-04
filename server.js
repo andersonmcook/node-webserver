@@ -7,17 +7,32 @@ const PORT = process.env.PORT || 3000;
 const path = require('path');
 const nodeSassMiddleware = require('node-sass-middleware');
 const bodyParser = require('body-parser');
+//const upload = require('multer')({dest: 'tmp/uploads'});
+const multer = require('multer');
+const imgur = require('imgur');
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'tmp/uploads');
+    },
+    filename: function (req, file, cb) {
+       /* cb(null, file.fieldname + '-' + Date.now());*/
+       cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+  }
+})
+const upload = multer({ storage: storage });
+
 // set view engine to a file ending with .jade in the views folder by default
 app.set('view engine', 'jade');
 
-/* body-parser middleware */
+
+/* body-parser middleware
 app.use(bodyParser.urlencoded({
   extended: false
-}));
+}));*/
 
 //node sass middleware
 app.use(nodeSassMiddleware({
@@ -47,6 +62,18 @@ app.get('/contact', (req, res) => {
 app.post('/contact', (req, res) => {
   const name = req.body.name
   res.send(`<h1>Thanks for contacting us, ${name}</h1`);
+});
+
+// upload a file
+app.get('/send-photo', (req, res) => {
+  res.render('sendphoto');
+});
+
+// return the file
+app.post('/send-photo', upload.single('image'), (req, res) => {
+  console.log(req.body, req.file);
+  req.file.filename = req.file.filename + ".jpeg";
+  res.send(`<h1>Thanks for sending us your photo</h1>`);
 });
 
 // using jade to render index.jade
