@@ -13,6 +13,7 @@ const calendar = require('node-cal/lib/year').calendar;
 // set view engine to a file ending with .jade in the views folder by default
 app.set('view engine', 'jade');
 
+//node sass middleware
 app.use(nodeSassMiddleware({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
@@ -26,13 +27,19 @@ app.use(nodeSassMiddleware({
 app.use(express.static('public'));
 
 const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
+const title = `.cal.js`;
+
+// set global title
+app.locals.title = 'THE Super Cool App';
+
+//contact.jade
+app.get('/contact', (req, res) => {
+  res.render('contact');
+});
 
 // using jade to render
 app.get('/jade', (req, res) => {
-  res.render('index', {
-    title: 'Super Cool App',
-    date: new Date()
-  });
+  res.render('index');
 });
 
 // hello world page
