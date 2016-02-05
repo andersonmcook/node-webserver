@@ -21,10 +21,12 @@
   "homepage": "https://github.com/andersonmcook/node-webserver#readme",
   "dependencies": {
     "body-parser": "^1.14.2",
+    "cheerio": "^0.20.0",
     "express": "^4.13.4",
     "font-awesome": "^4.5.0",
     "imgur": "^0.1.7",
     "jade": "^1.11.0",
+    "lodash": "^4.2.1",
     "multer": "^1.1.0",
     "node-cal": "github:andersonmcook/node-cal",
     "node-sass-middleware": "^0.9.7",

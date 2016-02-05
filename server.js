@@ -12,6 +12,8 @@ const multer = require('multer');
 const imgur = require('imgur');
 const fs = require('fs');
 const request = require('request');
+const _ = require('lodash');
+const cheerio = require('cheerio');
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
@@ -31,10 +33,11 @@ const upload = multer({ storage: storage });
 app.set('view engine', 'jade');
 
 
-/* body-parser middleware
+// body-parser middleware
 app.use(bodyParser.urlencoded({
   extended: false
-}));*/
+}));
+app.use(bodyParser.json());
 
 //node sass middleware
 app.use(nodeSassMiddleware({
@@ -60,6 +63,30 @@ app.get('/api', (req, res) => {
 // set header for cors
   res.header('Access-Control-Allow-Origin', '*');
   res.send({hello: 'world'});
+});
+
+// post json object
+app.post('/api', (req, res) => {
+  console.log(req.body);
+  const obj = _.mapValues(req.body, val => val.toUpperCase());
+  res.send(obj);
+});
+
+// webscraping with cheerio
+app.get('/api/news', (req, res) => {
+  const url = 'http://cnn.com';
+  request.get(url, (err, response, html) => {
+    if (err) throw err;
+    const news = [];
+    const $ = cheerio.load(html);
+
+    news.push({
+      title: $('.banner-text').text(),
+      url: $('.banner-text').closest('a').attr('href')
+    });
+
+    res.send(news);
+  });
 });
 
 // using request module
