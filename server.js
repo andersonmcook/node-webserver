@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const imgur = require('imgur');
 const fs = require('fs');
+const request = require('request');
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
@@ -53,6 +54,23 @@ const title = `.cal.js`;
 
 // set global title
 app.locals.title = 'THE Super Cool App';
+
+// send json object
+app.get('/api', (req, res) => {
+// set header for cors
+  res.header('Access-Control-Allow-Origin', '*');
+  res.send({hello: 'world'});
+});
+
+// using request module
+app.get('/api/weather', (req, res) => {
+  const url = 'https://api.forecast.io/forecast/4bf87414e256897cac4a0724afcda091/37.8267,-122.423';
+  request.get(url, (err, response, body) => {
+    if (err) throw err;
+    res.header('Access-Control-Allow-Origin', '*');
+    res.send(JSON.parse(body));
+  });
+});
 
 // contact.jade
 app.get('/contact', (req, res) => {
