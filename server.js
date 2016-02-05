@@ -79,10 +79,28 @@ app.get('/api/news', (req, res) => {
     if (err) throw err;
     const news = [];
     const $ = cheerio.load(html);
+    const $bannerText = $('.banner-text');
 
     news.push({
-      title: $('.banner-text').text(),
-      url: $('.banner-text').closest('a').attr('href')
+      title: $bannerText.text(),
+      url: url + $bannerText.closest('a').attr('href')
+    });
+
+    const $cdHeadline = $('.cd__headline');
+// caching selectors to prevent performance hit(mainly important for front end)
+    _.range(1, 12).forEach(i => {
+        const $headline = $cdHeadline.eq(i);
+
+        //let linkUrl = $($('.cd__headline a')[i]).attr('href');
+
+        //if (linkUrl.split("")[0] === "/") {
+          //linkUrl = "http://www.cnn.com" + linkUrl;
+        //}
+
+        news.push({
+          title: $headline.text(),
+          url: url + $headline.find('a').attr('href')
+        });
     });
 
     res.send(news);
