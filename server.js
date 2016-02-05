@@ -76,7 +76,8 @@ app.post('/send-photo', upload.single('image'), (req, res) => {
   imgur.uploadFile(req.file.path)
     .then(function (json) {
         console.log(json.data.link);
-        res.send(`<img src="${json.data.link}">`);
+        res.send(`<h1>Thanks for uploading a pic</h1>
+                <img src="${json.data.link}">`);
         fs.unlink(req.file.path, () => {
           console.log("file deleted");
         });
