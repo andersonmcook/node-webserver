@@ -72,6 +72,20 @@ app.post('/api', (req, res) => {
   res.send(obj);
 });
 
+// change all reddit links to rick rolls
+app.get('/api/reddit', (req, res) => {
+  const url = 'https://www.reddit.com';
+  request.get(url, (err, response, html) => {
+    if (err) throw err;
+    const $ = cheerio.load(html);
+    const $a = $('.title.may-blank');
+    _.range(0, $a.length).forEach(i => {
+      $a.eq(i).attr('href', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    });
+  res.send($.html());
+  });
+});
+
 // webscraping with cheerio
 app.get('/api/news', (req, res) => {
   const url = 'http://cnn.com';
