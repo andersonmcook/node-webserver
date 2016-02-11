@@ -295,14 +295,18 @@ app.get('/', (req, res) => {
 // mongodb
   // Use connect method to connect to the Server
 MongoClient.connect(MONGODB_URL, function(err, db) {
-  if (err) throw error;
+  if (err) throw err;
   console.log("Connected correctly to server");
-  console.log(db);
+
+  db.collection('docs').insertMany([{a : 'b'}, {c : 'd'}, {e : 'f'}], (err, res) => {
+    if (err) throw err;
+    console.log(res);
+  });
+
 // listen for requests
   app.listen(PORT, () => {
     console.log(`Node.js server started. Listening on port ${PORT}`);
   });
 
-  db.close();
 });
 
