@@ -162,8 +162,16 @@ app.get('/contact', (req, res) => {
 
 // post
 app.post('/contact', (req, res) => {
-  const name = req.body.name
-  res.send(`<h1>Thanks for contacting us, ${name}</h1`);
+  const name = req.body.name;
+  const email = req.body.email;
+  const message = req.body.message;
+  console.log(name, email, message);
+  db.collection('contacts').insertOne({"name": name, "email": email, "message": message}, (err, result) => {
+    if (err) throw err;
+    res.send(`${name}, ${email}, ${message}`);
+  });
+
+  // res.send(`<h1>Thanks for contacting us, ${name}</h1`);
 });
 
 // upload a file
