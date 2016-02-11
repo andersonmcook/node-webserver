@@ -14,6 +14,8 @@ const fs = require('fs');
 const request = require('request');
 const _ = require('lodash');
 const cheerio = require('cheerio');
+const MongoClient = require('mongodb').MongoClient;
+const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
@@ -290,7 +292,17 @@ app.get('/', (req, res) => {
     </ul>`);
 });
 
+// mongodb
+  // Use connect method to connect to the Server
+MongoClient.connect(MONGODB_URL, function(err, db) {
+  if (err) throw error;
+  console.log("Connected correctly to server");
+  console.log(db);
 // listen for requests
-app.listen(PORT, () => {
-  console.log(`Node.js server started. Listening on port ${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`Node.js server started. Listening on port ${PORT}`);
+  });
+
+  db.close();
 });
+
