@@ -162,13 +162,14 @@ app.get('/contact', (req, res) => {
 
 // post
 app.post('/contact', (req, res) => {
-  const name = req.body.name;
-  const email = req.body.email;
-  const message = req.body.message;
-  console.log(name, email, message);
-  db.collection('contacts').insertOne({"name": name, "email": email, "message": message}, (err, result) => {
+  const obj = {
+    name: req.body.name,
+    email: req.body.email,
+    message: req.body.message
+  };
+  db.collection('contacts').insertOne(obj, (err, result) => {
     if (err) throw err;
-    res.send(`${name}, ${email}, ${message}`);
+    res.send(`${obj.name}, ${obj.email}, ${obj.message}`);
   });
 
   // res.send(`<h1>Thanks for contacting us, ${name}</h1`);
