@@ -155,6 +155,14 @@ app.get('/api/weather', (req, res) => {
   });
 });
 
+// get top headline
+app.get('/api/news/topheadline', (req, res) => {
+  db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
+    if (err) throw err;
+    res.send(`<h1>${doc.top[0].title}</h1><a href="${doc.top[0].url}">${doc.top[0].url}</a>`);
+  });
+});
+
 // contact.jade
 app.get('/contact', (req, res) => {
   res.render('contact');
