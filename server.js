@@ -16,6 +16,7 @@ const _ = require('lodash');
 const cheerio = require('cheerio');
 const MongoClient = require('mongodb').MongoClient;
 const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
+let db;
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
@@ -69,9 +70,13 @@ app.get('/api', (req, res) => {
 
 // post json object
 app.post('/api', (req, res) => {
-  console.log(req.body);
   const obj = _.mapValues(req.body, val => val.toUpperCase());
-  res.send(obj);
+
+  db.collection('allcaps').insertOne(obj, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.send(obj);
+  });
 });
 
 // change all reddit links to rick rolls
@@ -90,36 +95,53 @@ app.get('/api/reddit', (req, res) => {
 
 // webscraping with cheerio
 app.get('/api/news', (req, res) => {
-  const url = 'http://cnn.com';
-  request.get(url, (err, response, html) => {
-    if (err) throw err;
-    const news = [];
-    const $ = cheerio.load(html);
-    const $bannerText = $('.banner-text');
+// grab latest news from database
+  db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
+    console.log(doc._id.getTimestamp())
+// if doc exists and is less than 15 minutes old, return from db
+    if (doc) {
+      const FIFTEEN_MINUTES_IN_MS = 15 * 60 * 1000;
+      const diff = new Date() - doc._id.getTimestamp() - FIFTEEN_MINUTES_IN_MS;
+      const lessThan15MinutesAgo = diff < 0;
 
-    news.push({
-      title: $bannerText.text(),
-      url: url + $bannerText.closest('a').attr('href')
-    });
+      if (lessThan15MinutesAgo) {
+        res.send(doc);
+        return;
+      }
+    }
+// end if doc exists
+    const url = 'http://cnn.com';
 
-    const $cdHeadline = $('.cd__headline');
-// caching selectors to prevent performance hit(mainly important for front end)
-    _.range(1, 12).forEach(i => {
+    request.get(url, (err, response, html) => {
+      if (err) throw err;
+
+      const news = [];
+      const $ = cheerio.load(html);
+
+      const $bannerText = $('.banner-text');
+
+      news.push({
+        title: $bannerText.text(),
+        url: url + $bannerText.closest('a').attr('href')
+      });
+
+      const $cdHeadline = $('.cd__headline');
+
+      _.range(1, 12).forEach(i => {
         const $headline = $cdHeadline.eq(i);
-
-        //let linkUrl = $($('.cd__headline a')[i]).attr('href');
-
-        //if (linkUrl.split("")[0] === "/") {
-          //linkUrl = "http://www.cnn.com" + linkUrl;
-        //}
 
         news.push({
           title: $headline.text(),
           url: url + $headline.find('a').attr('href')
         });
-    });
+      });
 
-    res.send(news);
+      db.collection('news').insertOne({ top: news }, (err, result) => {
+        if (err) throw err;
+
+        res.send(news);
+      });
+    });
   });
 });
 
@@ -294,14 +316,11 @@ app.get('/', (req, res) => {
 
 // mongodb
   // Use connect method to connect to the Server
-MongoClient.connect(MONGODB_URL, function(err, db) {
+MongoClient.connect(MONGODB_URL, function(err, database) {
   if (err) throw err;
   console.log("Connected correctly to server");
 
-  db.collection('docs').insertMany([{a : 'b'}, {c : 'd'}, {e : 'f'}], (err, res) => {
-    if (err) throw err;
-    console.log(res);
-  });
+  db = database;
 
 // listen for requests
   app.listen(PORT, () => {
