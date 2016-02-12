@@ -71,11 +71,12 @@ app.get('/api', (req, res) => {
 // post json object
 app.post('/api', (req, res) => {
   const obj = _.mapValues(req.body, val => val.toUpperCase());
-
-  db.collection('allcaps').insertOne(obj, (err, result) => {
+  const AC = new Allcaps(obj);
+  AC.save((err, _AC) =>{
+  // db.collection('allcaps').insertOne(obj, (err, result) => {
     if (err) throw err;
-    console.log(result);
-    res.send(obj);
+    console.log(_AC);
+    res.send(_AC);
   });
 });
 
@@ -96,7 +97,8 @@ app.get('/api/reddit', (req, res) => {
 // webscraping with cheerio
 app.get('/api/news', (req, res) => {
 // grab latest news from database
-  db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
+  News.findOne().sort('-_id').exec((err, doc) => {
+  // db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
     console.log(doc._id.getTimestamp())
 // if doc exists and is less than 15 minutes old, return from db
     if (doc) {
@@ -110,6 +112,8 @@ app.get('/api/news', (req, res) => {
       }
     }
 // end if doc exists
+
+// use cheerio to webscrape and loop over dom elements
     const url = 'http://cnn.com';
 
     request.get(url, (err, response, html) => {
@@ -135,11 +139,14 @@ app.get('/api/news', (req, res) => {
           url: url + $headline.find('a').attr('href')
         });
       });
+// save to db with mongoose
+      const obj = new News({top: news});
 
-      db.collection('news').insertOne({ top: news }, (err, result) => {
+      obj.save((err, _news) => {
+      // db.collection('news').insertOne({ top: news }, (err, result) => {
         if (err) throw err;
 
-        res.send(news);
+        res.send(_news);
       });
     });
   });
@@ -157,7 +164,8 @@ app.get('/api/weather', (req, res) => {
 
 // get top headline
 app.get('/api/news/topheadline', (req, res) => {
-  db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
+    News.findOne().sort('-_id').exec((err, doc) => {
+  // db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
     if (err) throw err;
     res.send(`<h1>${doc.top[0].title}</h1><a href="${doc.top[0].url}">${doc.top[0].url}</a>`);
   });
@@ -347,6 +355,18 @@ const Contact = mongoose.model('contacts', mongoose.Schema({
   name: String,
   email: String,
   message: String
+}));
+
+// create a model to use in /api/news to put in db news
+const News = mongoose.model('news', mongoose.Schema({
+  top: [{
+      title: String,
+      url: String
+    }]
+}));
+
+const Allcaps = mongoose.model('allcaps', mongoose.Schema({
+  hello: String
 }));
 
 mongoose.connection.on('open', () => {
