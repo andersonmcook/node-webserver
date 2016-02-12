@@ -210,7 +210,11 @@ app.post('/send-photo', upload.single('image'), (req, res) => {
   imgur.uploadFile(req.file.path)
     .then(function (json) {
         console.log(json.data.link);
-        db.collection('images').insertOne({"url": json.data.link})
+        const obj = new Image({url: json.data.link});
+        obj.save((err, _obj) => {
+          if (err) throw err;
+        });
+        // db.collection('images').insertOne({"url": json.data.link});
         res.send(`<h1>Thanks for uploading a pic</h1>
                 <img src="${json.data.link}">`);
         fs.unlink(req.file.path, () => {
@@ -367,6 +371,10 @@ const News = mongoose.model('news', mongoose.Schema({
 
 const Allcaps = mongoose.model('allcaps', mongoose.Schema({
   hello: String
+}));
+
+const Image = mongoose.model('images', mongoose.Schema({
+  url: String
 }));
 
 mongoose.connection.on('open', () => {
