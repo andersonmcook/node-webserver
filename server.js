@@ -369,9 +369,7 @@ const News = mongoose.model('news', mongoose.Schema({
     }]
 }));
 
-const Allcaps = mongoose.model('allcaps', mongoose.Schema({
-  hello: String
-}));
+const Allcaps = mongoose.model('allcaps', mongoose.Schema({}, {strict: false}));
 
 const Image = mongoose.model('images', mongoose.Schema({
   url: String
