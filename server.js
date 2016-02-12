@@ -16,20 +16,20 @@ const mongoose = require('mongoose');
 const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
 
 
-const routes = require('./routes/routes');
 const api = require('./routes/api');
-const contact = require('./routes/contact');
-const sendPhoto = require('./routes/send-photo');
 const calendar = require('./routes/calendar');
+const contact = require('./routes/contact');
+const routes = require('./routes/routes');
+const sendPhoto = require('./routes/send-photo');
 
 // set view engine to a file ending with .jade in the views folder by default
 app.set('view engine', 'jade');
 
-app.use(routes);
 app.use(api);
-app.use(contact);
-app.use(sendPhoto);
 app.use(calendar);
+app.use(contact);
+app.use(routes);
+app.use(sendPhoto);
 
 // body-parser middleware
 app.use(bodyParser.urlencoded({
@@ -69,7 +69,7 @@ mongoose.connection.on('open', () => {
   });
 });
 
-module.exports = app;
+// module.exports = app;
 
 // // mongodb
 // //   Use connect method to connect to the Server

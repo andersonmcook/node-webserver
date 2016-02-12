@@ -37,7 +37,6 @@ router.get('/hello', (req, res) => {
   }, 20000);
 });
 
-// changed app to router below, switch if
 
 // random num gen between min and max
 router.get('/random/:min/:max', (req, res) => {
