@@ -177,7 +177,7 @@ app.post('/contact', (req, res) => {
   };
   db.collection('contacts').insertOne(obj, (err, result) => {
     if (err) throw err;
-    res.send(`${obj.name}, ${obj.email}, ${obj.message}`);
+    res.send(`<h1>Thanks for contacting us, ${obj.name}</h1>`);
   });
 
   // res.send(`<h1>Thanks for contacting us, ${name}</h1`);
@@ -194,7 +194,7 @@ app.post('/send-photo', upload.single('image'), (req, res) => {
   imgur.uploadFile(req.file.path)
     .then(function (json) {
         console.log(json.data.link);
-        db.collection('images').insertOne({"url": json.data.link});
+        db.collection('images').insertOne({"url": json.data.link})
         res.send(`<h1>Thanks for uploading a pic</h1>
                 <img src="${json.data.link}">`);
         fs.unlink(req.file.path, () => {
