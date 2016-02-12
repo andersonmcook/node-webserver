@@ -15,9 +15,10 @@ const cheerio = require('cheerio');
 const mongoose = require('mongoose');
 const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
 
+// set global title
+app.locals.title = 'THE Super Cool App';
 
 const routes = require('./routes/');
-app.use(routes);
 
 // set view engine to a file ending with .jade in the views folder by default
 app.set('view engine', 'jade');
@@ -42,13 +43,7 @@ app.use(nodeSassMiddleware({
 // able to use static files
 app.use(express.static('public'));
 
-// const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
-// const title = `.cal.js`;
-
-// set global title
-app.locals.title = 'THE Super Cool App';
-
-
+app.use(routes);
 
 mongoose.connect(MONGODB_URL);
 
@@ -60,21 +55,4 @@ mongoose.connection.on('open', () => {
     console.log(`Node.js server started. Listening on port ${PORT}`);
   });
 });
-
-// module.exports = app;
-
-// // mongodb
-// //   Use connect method to connect to the Server
-// MongoClient.connect(MONGODB_URL, function(err, database) {
-//   if (err) throw err;
-//   console.log("Connected correctly to server");
-
-//   db = database;
-
-// // listen for requests
-//   app.listen(PORT, () => {
-//     console.log(`Node.js server started. Listening on port ${PORT}`);
-//   });
-
-// });
 

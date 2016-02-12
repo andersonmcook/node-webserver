@@ -20,7 +20,8 @@ const sendPhoto = require('./send-photo');
 
 router.use(api);
 router.use(calendar);
-router.use(contact);
+// prepending so I don't have to add /contact to routes in contact
+router.use('/contact', contact);
 router.use(sendPhoto);
 
 // using jade to render index.jade
