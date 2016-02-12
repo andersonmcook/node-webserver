@@ -12,6 +12,17 @@ const Contact = require('../models/contact');
 const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
 const title = `.cal.js`;
 
+
+const api = require('./api');
+const calendar = require('./calendar');
+const contact = require('./contact');
+const sendPhoto = require('./send-photo');
+
+router.use(api);
+router.use(calendar);
+router.use(contact);
+router.use(sendPhoto);
+
 // using jade to render index.jade
 router.get('/jade', (req, res) => {
   res.render('index');

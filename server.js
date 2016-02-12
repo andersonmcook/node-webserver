@@ -16,20 +16,12 @@ const mongoose = require('mongoose');
 const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
 
 
-const api = require('./routes/api');
-const calendar = require('./routes/calendar');
-const contact = require('./routes/contact');
-const routes = require('./routes/routes');
-const sendPhoto = require('./routes/send-photo');
+const routes = require('./routes/');
+app.use(routes);
 
 // set view engine to a file ending with .jade in the views folder by default
 app.set('view engine', 'jade');
 
-app.use(api);
-app.use(calendar);
-app.use(contact);
-app.use(routes);
-app.use(sendPhoto);
 
 // body-parser middleware
 app.use(bodyParser.urlencoded({
