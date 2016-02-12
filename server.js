@@ -16,6 +16,10 @@ const _ = require('lodash');
 const cheerio = require('cheerio');
 const mongoose = require('mongoose');
 const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
+const Image = require('./models/image');
+const News = require('./models/news');
+const Contact = require('./models/contact');
+const Allcaps = require('./models/allcaps');
 // let db;
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
@@ -353,29 +357,6 @@ app.get('/', (req, res) => {
 });
 
 mongoose.connect(MONGODB_URL);
-
-// create a model to use in /contact to put in db contacts
-const Contact = mongoose.model('contacts', mongoose.Schema({
-  name: String,
-  email: String,
-  message: String
-}));
-
-// create a model to use in /api/news to put in db news
-const News = mongoose.model('news', mongoose.Schema({
-  top: [{
-      title: String,
-      url: String
-    }]
-}));
-
-// loose schema for allcaps
-const Allcaps = mongoose.model('allcaps', mongoose.Schema({}, {strict: false}));
-
-// image schema
-const Image = mongoose.model('images', mongoose.Schema({
-  url: String
-}));
 
 mongoose.connection.on('open', () => {
   console.log("MONGO OPEN");
