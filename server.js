@@ -68,7 +68,7 @@ app.get('/api', (req, res) => {
   res.send({hello: 'world'});
 });
 
-// post json object
+// post json object with Postman and set values to upper case
 app.post('/api', (req, res) => {
   const obj = _.mapValues(req.body, val => val.toUpperCase());
   const AC = new Allcaps(obj);
@@ -369,8 +369,10 @@ const News = mongoose.model('news', mongoose.Schema({
     }]
 }));
 
+// loose schema for allcaps
 const Allcaps = mongoose.model('allcaps', mongoose.Schema({}, {strict: false}));
 
+// image schema
 const Image = mongoose.model('images', mongoose.Schema({
   url: String
 }));
