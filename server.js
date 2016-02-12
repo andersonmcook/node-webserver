@@ -14,9 +14,9 @@ const fs = require('fs');
 const request = require('request');
 const _ = require('lodash');
 const cheerio = require('cheerio');
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
-let db;
+// let db;
 // const execSync = require('child_process').execSync;
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
@@ -170,15 +170,23 @@ app.get('/contact', (req, res) => {
 
 // post
 app.post('/contact', (req, res) => {
-  const obj = {
+
+  const obj = new Contact({
     name: req.body.name,
     email: req.body.email,
     message: req.body.message
-  };
-  db.collection('contacts').insertOne(obj, (err, result) => {
-    if (err) throw err;
-    res.send(`<h1>Thanks for contacting us, ${obj.name}</h1>`);
   });
+
+  obj.save((err, newObj) => {
+    if (err) throw err;
+    console.log(newObj);
+    res.send(`<h1>Thanks for contacting us, ${newObj.name}</h1>`);
+  });
+
+  // db.collection('contacts').insertOne(obj, (err, result) => {
+  //   if (err) throw err;
+  //   res.send(`<h1>Thanks for contacting us, ${obj.name}</h1>`);
+  // });
 
   // res.send(`<h1>Thanks for contacting us, ${name}</h1`);
 });
@@ -332,18 +340,36 @@ app.get('/', (req, res) => {
     </ul>`);
 });
 
-// mongodb
-  // Use connect method to connect to the Server
-MongoClient.connect(MONGODB_URL, function(err, database) {
-  if (err) throw err;
-  console.log("Connected correctly to server");
+mongoose.connect(MONGODB_URL);
 
-  db = database;
+// create a model to use in /contact to put in db contacts
+const Contact = mongoose.model('contacts', mongoose.Schema({
+  name: String,
+  email: String,
+  message: String
+}));
 
-// listen for requests
+mongoose.connection.on('open', () => {
+  console.log("MONGO OPEN");
+
+  // listen for requests
   app.listen(PORT, () => {
     console.log(`Node.js server started. Listening on port ${PORT}`);
   });
-
 });
+
+// // mongodb
+// //   Use connect method to connect to the Server
+// MongoClient.connect(MONGODB_URL, function(err, database) {
+//   if (err) throw err;
+//   console.log("Connected correctly to server");
+
+//   db = database;
+
+// // listen for requests
+//   app.listen(PORT, () => {
+//     console.log(`Node.js server started. Listening on port ${PORT}`);
+//   });
+
+// });
 
