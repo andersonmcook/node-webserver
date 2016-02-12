@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const app = express.Router();
+const router = express.Router();
 const multer = require('multer');
 const imgur = require('imgur');
 const fs = require('fs');
@@ -13,12 +13,12 @@ const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
 const title = `.cal.js`;
 
 // using jade to render index.jade
-app.get('/jade', (req, res) => {
+router.get('/jade', (req, res) => {
   res.render('index');
 });
 
 // hello world page
-app.get('/hello', (req, res) => {
+router.get('/hello', (req, res) => {
   const name = req.query.name || "user";
   const msg = `<h1>Hello ${name}!</h1><h1>Goodbye ${name}!</h1>`;
   res.writeHead(200, {"Content-Type": "text/html"});
@@ -37,10 +37,10 @@ app.get('/hello', (req, res) => {
   }, 20000);
 });
 
-// changed router to app below, switch if
+// changed app to router below, switch if
 
 // random num gen between min and max
-app.get('/random/:min/:max', (req, res) => {
+router.get('/random/:min/:max', (req, res) => {
   const min = req.params.min;
   const max = req.params.max;
   res.send(`
@@ -54,7 +54,7 @@ app.get('/random/:min/:max', (req, res) => {
 
 
 // random num gen page
-app.get('/random', (req, res) => {
+router.get('/random', (req, res) => {
   res
     .status(200)
     .send(`
@@ -66,7 +66,7 @@ app.get('/random', (req, res) => {
 });
 
 // 403 page
-app.get('/secret', (req, res) => {
+router.get('/secret', (req, res) => {
   res
     .status(403)
     .send(403, `${backButton}
@@ -74,7 +74,7 @@ app.get('/secret', (req, res) => {
 });
 
 // main page with links to other pages
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.status(200).send(`
     <head><title>Main</title>
       <link rel="stylesheet" type="text/css" href="http://localhost:3000/white.css">
@@ -92,4 +92,4 @@ app.get('/', (req, res) => {
     </ul>`);
 });
 
-module.exports = app;
+module.exports = router;
