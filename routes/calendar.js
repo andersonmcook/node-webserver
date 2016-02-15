@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const wholeMonth = require('node-cal/lib/month').wholeMonth;
 const calendar = require('node-cal/lib/year').calendar;
-const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
+// const backButton = `<a class="back" href="http://localhost:3000/">Back</a>`;
 const title = `.cal.js`;
 
 // month calendar
@@ -19,7 +19,6 @@ router.get('/cal/:month/:year', (req, res) => {
       <title>Calendar for ${month} ${year}</title>
       <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    ${backButton}
     <code>${days}</code>`);
 });
 
@@ -33,7 +32,6 @@ router.get('/cal/:year', (req, res) => {
       <title>Calendar for ${year}</title>
       <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    ${backButton}
     <code>${calendarResult}</code>`)
 });
 
@@ -51,8 +49,7 @@ router.get('/cal', (req, res) => {
       <title>Calendar for ${month} ${year}</title>
       <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
     </head>
-    ${backButton}
-    <code>${days}`);
+    <code>${days}</code>`);
 });
 
 module.exports = router;
