@@ -51,7 +51,7 @@ router.get('/api/news', (req, res) => {
 // grab latest news from database
   News.findOne().sort('-_id').exec((err, doc) => {
   // db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
-    console.log(doc._id.getTimestamp())
+    // console.log(doc._id.getTimestamp())
 // if doc exists and is less than 15 minutes old, return from db
     if (doc) {
       const FIFTEEN_MINUTES_IN_MS = 15 * 60 * 1000;
