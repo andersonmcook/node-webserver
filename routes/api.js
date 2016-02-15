@@ -118,7 +118,7 @@ router.get('/api/weather', (req, res) => {
 router.get('/api/news/topheadline', (req, res) => {
     News.findOne().sort('-_id').exec((err, doc) => {
   // db.collection('news').findOne({}, {sort: {_id: -1}}, (err, doc) => {
-    const topStory = doc.top && doc.top[0] || '';
+    const topStory = doc && doc.top && doc.top[0] || '';
     if (err) throw err;
     res.send(`<h1>${topStory.title}</h1><a href="${topStory.url}">${topStory.url}</a>`);
   });

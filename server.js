@@ -16,7 +16,7 @@ const cheerio = require('cheerio');
 const mongoose = require('mongoose');
 
 const MONGODB_HOST = process.env.MONGODB_HOST || 'localhost';
-const MONGODB_PORT = process.env.MONGOD_PORT || 27017;
+const MONGODB_PORT = process.env.MONGODB_PORT || 27017;
 const MONGODB_USER = process.env.MONGODB_USER || '';
 const MONGODB_PASS = process.env.MONGOD_PASS || '';
 const MONGODB_DB = 'node-webserver';
