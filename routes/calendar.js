@@ -17,7 +17,7 @@ router.get('/cal/:month/:year', (req, res) => {
   res.status(200).send(`
     <head>
       <title>Calendar for ${month} ${year}</title>
-      <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
+      <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     ${backButton}
     <code>${days}</code>`);
@@ -31,7 +31,7 @@ router.get('/cal/:year', (req, res) => {
   res.status(200).send(`
     <head>
       <title>Calendar for ${year}</title>
-      <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css">
+      <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     ${backButton}
     <code>${calendarResult}</code>`)
