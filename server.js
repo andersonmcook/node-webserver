@@ -18,6 +18,7 @@ const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
 // set global title
 app.locals.title = 'THE Super Cool App';
 
+// looks in routes folder and grabs the index.js by default
 const routes = require('./routes/');
 
 // set view engine to a file ending with .jade in the views folder by default
