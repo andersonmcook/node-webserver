@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
+// needs to have a dynamic port for heroku to work
 const PORT = process.env.PORT || 3000;
 const path = require('path');
 const nodeSassMiddleware = require('node-sass-middleware');
@@ -13,7 +14,15 @@ const request = require('request');
 const _ = require('lodash');
 const cheerio = require('cheerio');
 const mongoose = require('mongoose');
-const MONGODB_URL = 'mongodb://localhost:27017/node-webserver';
+
+const MONGODB_HOST = process.env.MONGODB_HOST || 'localhost';
+const MONGODB_PORT = process.env.MONGOD_PORT || 27017;
+const MONGODB_USER = process.env.MONGODB_USER || '';
+const MONGODB_PASS = process.env.MONGOD_PASS || '';
+const MONGODB_DB = 'node-webserver';
+const MONGODB_URL_PREFIX = MONGODB_USER ? `${MONGODB_USER}:${MONGODB_PASS}@` : '';
+
+const MONGODB_URL = `mongodb://${MONGODB_URL_PREFIX}${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DB}`;
 
 // set global title
 app.locals.title = 'THE Super Cool App';
